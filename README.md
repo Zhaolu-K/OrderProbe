@@ -136,6 +136,11 @@ $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
 **Composite Robustness**:
 $$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
+Where:
+- **MDR** (Mean Degradation Relative): $$\text{MDR} = \text{mean}\left(\frac{\text{Original\_Score} - S_{\text{Acc}}}{\text{Original\_Score}}\right)$$
+- **MDA** (Mean Degradation Absolute): $$\text{MDA} = \max(\text{Original\_Score} - S_{\text{Acc}})$$
+- **σ**: Standard deviation of mean scores across 6 linguistic structures
+
 #### 6. Information Density (`S_Info`)
 
 Rewards concise explanations by penalizing verbosity:
@@ -144,26 +149,6 @@ Rewards concise explanations by penalizing verbosity:
 $$S_{\text{Info}} = \text{BP} \times P_{\text{ROUGE}}$$
 
 Counters "knowledge dumping" with brevity penalty and ROUGE precision.
- - **`E_perf`**: Average performance deviation across arrangements
- - **`R_sens`**: Maximum rigidity sensitivity across arrangements
- - **`S_Cons`**: Composite structural consistency score
-
-### 5. Robustness Metrics
-
-Assesses model resilience under various perturbations:
-
-#### Sequential Robustness (`S_seq`)
-$$\text{MDR} = \text{mean}\left(\frac{\text{Original\_Score} - S_{\text{Acc}}}{\text{Original\_Score}}\right)$$
-$$\text{MDA} = \max(\text{Original\_Score} - S_{\text{Acc}})$$
-$$S_{\text{seq}} = 1 - (0.5 \times \text{MDR} + 0.5 \times \text{MDA})$$
-
-#### Structural Robustness (`S_struct`)
-$$\mu_k = \text{average}(S_{\text{Acc}}^{\text{mean}}) \text{ over idioms in structure } k$$
-$$\sigma = \text{standard deviation of } \{\mu_1, \mu_2, \dots, \mu_6\}$$
-$$S_{\text{struct}} = 1 - \text{Normalize}(\sigma)$$
-
-#### Composite Robustness (`S_Rob`)
-$$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
 ## 🛠️ Installation
 
