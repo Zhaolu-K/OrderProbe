@@ -34,29 +34,29 @@ orderprobe/
 │   └── README.md                 # Dataset documentation
 ├── examples/          # Usage examples and demos
 │   └── basic_usage.py            # Basic usage demonstration
-├── Sacc/              # Semantic Accuracy (S_Acc^mean)
+├── Sacc/              # Semantic Accuracy (`S_Acc^mean`)
 │   ├── sacc_chinese.py           # Chinese idiom evaluation
 │   ├── sacc_traditional_chinese.py  # Traditional Chinese evaluation
 │   ├── sacc_japanese.py          # Japanese idiom evaluation
 │   ├── sacc_korean.py            # Korean idiom evaluation
 │   └── README.md
-├── Scons/             # Structural Consistency (S_Cons)
-│   ├── e_perf_calculator.py      # Performance Deviation (E_perf)
-│   ├── r_sens_calculator.py      # Rigidity Sensitivity (R_sens)
-│   ├── s_cons_calculator.py      # Structural Consistency (S_Cons)
+├── Scons/             # Structural Consistency (`S_Cons`)
+│   ├── e_perf_calculator.py      # Performance Deviation (`E_perf`)
+│   ├── r_sens_calculator.py      # Rigidity Sensitivity (`R_sens`)
+│   ├── s_cons_calculator.py      # Structural Consistency (`S_Cons`)
 │   └── README.md
-├── Slogic/            # Logical Validity (S_Log)
-│   ├── s_log_calculator.py       # Logical Validity (S_Log)
+├── Slogic/            # Logical Validity (`S_Log`)
+│   ├── s_log_calculator.py       # Logical Validity (`S_Log`)
 │   └── README.md
-├── Sinfo/             # Information Density (S_Info)
-│   ├── s_info_calculator.py      # Information Density (S_Info)
+├── Sinfo/             # Information Density (`S_Info`)
+│   ├── s_info_calculator.py      # Information Density (`S_Info`)
 │   └── README.md
-├── Srobust/           # Robustness Metrics (S_Rob)
-│   ├── mdr_calculator.py         # Mean Degradation Relative (MDR)
-│   ├── mda_calculator.py         # Mean Degradation Absolute (MDA)
-│   ├── sseq_calculator.py        # Sequential Robustness (S_seq)
-│   ├── srob_calculator.py        # Composite Robustness (S_Rob)
-│   ├── simple_sstruct.py         # Structural Robustness (S_struct)
+├── Srobust/           # Robustness Metrics (`S_Rob`)
+│   ├── mdr_calculator.py         # Mean Degradation Relative (`MDR`)
+│   ├── mda_calculator.py         # Mean Degradation Absolute (`MDA`)
+│   ├── sseq_calculator.py        # Sequential Robustness (`S_seq`)
+│   ├── srob_calculator.py        # Composite Robustness (`S_Rob`)
+│   ├── simple_sstruct.py         # Structural Robustness (`S_struct`)
 │   └── README.md
 └── README.md          # This file
 ```
@@ -344,7 +344,7 @@ All calculators generate Excel files with results in the `results/` directory:
 ```bash
 # Sacc Configuration
 MODEL_FILE=path/to/input.csv    # Input: model predictions
-OUTPUT_FILE=path/to/output.csv  # Output: S_Acc results
+OUTPUT_FILE=path/to/output.csv  # Output: `S_Acc` results
 REF_AGG_MODE=max                # "max" or "mean" aggregation
 ORIGINAL_FILE=path/to/reference.csv  # Reference data
 
@@ -470,11 +470,11 @@ orderprobe/
 │   └── README.md           # Dataset documentation
 ├── examples/               # Usage examples
 │   └── basic_usage.py
-├── Sacc/                   # Semantic Accuracy (S_Acc^mean)
-├── Slogic/                 # Logical Validity (S_Log)
-├── Sinfo/                  # Information Density (S_Info)
-├── Scons/                  # Structural Consistency (S_Cons)
-└── Srobust/                # Robustness Metrics (S_Rob)
+├── Sacc/                   # Semantic Accuracy (`S_Acc^mean`)
+├── Slogic/                 # Logical Validity (`S_Log`)
+├── Sinfo/                  # Information Density (`S_Info`)
+├── Scons/                  # Structural Consistency (`S_Cons`)
+└── Srobust/                # Robustness Metrics (`S_Rob`)
 ```
 
 ## ✅ Open Source Readiness
