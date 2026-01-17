@@ -10,10 +10,13 @@ This module contains scripts for calculating various robustness metrics for idio
 - **Formula**:
 $$\mathrm{MDR} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} \frac{S_{\text{orig}} - S_{\text{pert}}^{p}}{S_{\text{orig}}}$$
 - **Original Scores**: Read from reference data files in `data/reference_explanations/` directory
+
 Display form:
+
 $$
 \mathrm{MDR} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} \frac{S_{\mathrm{orig}} - S_{\mathrm{pert}}^{p}}{S_{\mathrm{orig}}}
 $$
+
   - Language-specific files: `chinese_explanations.csv`, `traditional_chinese_explanations.csv`, `japanese_explanations.csv`, `korean_explanations.csv`
   - Scores are deterministically generated using a fixed random seed for reproducibility
 
@@ -23,16 +26,18 @@ $$
 - **Formula**:
 $$\mathrm{MDA} = \max_{p \in \mathcal{P}} \left( \frac{S_{\text{orig}} - S_{\text{pert}}^{p}}{S_{\text{orig}}} \right)$$
 - **Original Scores**: Same as MDR calculator - read from reference data files
+  
 Display form:
+
 $$
 \mathrm{MDA} = \max_{p \in \mathcal{P}} \left( \frac{S_{\mathrm{orig}} - S_{\mathrm{pert}}^{p}}{S_{\mathrm{orig}}} \right)
 $$
 
-### S_seq Calculator (Sequential Robustness)
+### $S_{\mathrm{seq}}$ Calculator (Sequential Robustness)
 - **File**: `sseq_calculator.py`
 - **Purpose**: Combines MDR and MDA into Sequential Robustness score
 - **Formula**:
-Display form:
+
 $$
 S_{\mathrm{seq}} = 1 - \left(0.5 \cdot \mathrm{MDR} + 0.5 \cdot \mathrm{MDA}\right)
 $$
@@ -48,10 +53,14 @@ $$S_{\text{struct}} = 1 - \text{Normalize}\big(\sigma(\mu_1,\mu_2,\dots,\mu_6)\b
 
 ## Composite Robustness
 
-### S_Rob Calculator (Overall Robustness)
+### $S_{\mathrm{Rob}}$ Calculator (Overall Robustness)
 - **File**: `srob_calculator.py`
 - **Purpose**: Combines sequential and structural robustness
-- **Formula**: S_Rob = (2 × S_seq × S_struct) / (S_seq + S_struct)
+- **Formula**:
+  
+$$
+S_{\mathrm{Rob}} = \frac{2 \times S_{\mathrm{seq}} \times S_{\mathrm{struct}}}{S_{\mathrm{seq}} + S_{\mathrm{struct}}}
+$$
 
 ## Data Requirements
 
@@ -77,3 +86,4 @@ python srob_calculator.py
 - This ensures reproducibility and eliminates data fabrication
 - Each calculator reads intermediate results from previous calculation steps
 - All metrics follow the formulas specified in the research paper
+
