@@ -93,7 +93,7 @@ Measures the ability to reconstruct the canonical four-character sequence from s
 
 ### Diagnostic Metrics
 
-#### 1. Semantic Fidelity (S_Acc^mean)
+#### 1. Semantic Fidelity (`S_Acc^mean`)
 
 Evaluates explanation quality using a tiered hybrid metric integrating cross-encoder relevance, multilingual embedding similarity, and lexical safeguards:
 
@@ -102,7 +102,7 @@ $$S_{\text{Acc}}^{\text{mean}} = w_1 \times S'_{\text{ce}} + w_2 \times \frac{S'
 
 **Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
 
-#### 3. Logical Validity (S_Log)
+#### 3. Logical Validity (`S_Log`)
 
 Detects fluent but contradictory definitions using entailment probability:
 
@@ -111,7 +111,7 @@ $$S_{\text{Log}} = P_{\text{NLI}}(e \Rightarrow r)$$
 
 Uses multilingual NLI classifier to ensure explanations logically entail reference meanings.
 
-#### 4. Structural Consistency (S_Cons)
+#### 4. Structural Consistency (`S_Cons`)
 
 Quantifies invariance to internal structural shuffles:
 
@@ -122,7 +122,7 @@ $$S_{\text{Cons}} = (1 - E_{\text{perf}}) \times (1 - R_{\text{sens}})$$
 
 Penalizes both average capability loss and localized brittleness across permutations.
 
-#### 5. Robustness (S_Rob)
+#### 5. Robustness (`S_Rob`)
 
 Combines sequential and structural robustness dimensions:
 
@@ -136,7 +136,7 @@ $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
 **Composite Robustness**:
 $$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
-#### 6. Information Density (S_Info)
+#### 6. Information Density (`S_Info`)
 
 Rewards concise explanations by penalizing verbosity:
 
@@ -144,25 +144,25 @@ Rewards concise explanations by penalizing verbosity:
 $$S_{\text{Info}} = \text{BP} \times P_{\text{ROUGE}}$$
 
 Counters "knowledge dumping" with brevity penalty and ROUGE precision.
-- **E_perf**: Average performance deviation across arrangements
-- **R_sens**: Maximum rigidity sensitivity across arrangements
-- **S_Cons**: Composite structural consistency score
+ - **`E_perf`**: Average performance deviation across arrangements
+ - **`R_sens`**: Maximum rigidity sensitivity across arrangements
+ - **`S_Cons`**: Composite structural consistency score
 
 ### 5. Robustness Metrics
 
 Assesses model resilience under various perturbations:
 
-#### Sequential Robustness (S_seq)
+#### Sequential Robustness (`S_seq`)
 $$\text{MDR} = \text{mean}\left(\frac{\text{Original_Score} - S_{\text{Acc}}}{\text{Original_Score}}\right)$$
 $$\text{MDA} = \max(\text{Original_Score} - S_{\text{Acc}})$$
 $$S_{\text{seq}} = 1 - (0.5 \times \text{MDR} + 0.5 \times \text{MDA})$$
 
-#### Structural Robustness (S_struct)
+#### Structural Robustness (`S_struct`)
 $$\mu_k = \text{average}(S_{\text{Acc}}^{\text{mean}}) \text{ over idioms in structure } k$$
 $$\sigma = \text{standard deviation of } \{\mu_1, \mu_2, \dots, \mu_6\}$$
 $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma)$$
 
-#### Composite Robustness (S_Rob)
+#### Composite Robustness (`S_Rob`)
 $$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
 ## 🛠️ Installation
@@ -364,28 +364,28 @@ Pre-configured models for different languages:
 ## 📈 Metric Interpretation
 
 ### Score Ranges
-- **S_Acc**: [0, 1], higher is better semantic quality
-- **S_Info**: [0, 1], higher indicates better information density (concise and informative)
-- **S_Log**: [0, 1], higher indicates better logical entailment
-- **S_Cons**: [0, 1], higher indicates better structural stability
-- **S_seq**: [0, 1], higher indicates better sequential robustness
-- **S_struct**: [0, 1], higher indicates better structural robustness
-- **S_Rob**: [0, 1], harmonic mean of sequential and structural robustness
+ - **`S_Acc`**: [0, 1], higher is better semantic quality
+ - **`S_Info`**: [0, 1], higher indicates better information density (concise and informative)
+ - **`S_Log`**: [0, 1], higher indicates better logical entailment
+ - **`S_Cons`**: [0, 1], higher indicates better structural stability
+ - **`S_seq`**: [0, 1], higher indicates better sequential robustness
+ - **`S_struct`**: [0, 1], higher indicates better structural robustness
+ - **`S_Rob`**: [0, 1], harmonic mean of sequential and structural robustness
 
 ### Performance Guidelines
-- **S_Acc > 0.8**: Excellent semantic understanding
-- **S_Info > 0.75**: Good information density (concise and informative)
-- **S_Log > 0.7**: Good logical consistency
-- **S_Cons > 0.9**: High structural stability
-- **S_Rob > 0.85**: Good overall robustness
+ - **`S_Acc` > 0.8**: Excellent semantic understanding
+ - **`S_Info` > 0.75**: Good information density (concise and informative)
+ - **`S_Log` > 0.7**: Good logical consistency
+ - **`S_Cons` > 0.9**: High structural stability
+ - **`S_Rob` > 0.85**: Good overall robustness
 
 ### Combined Assessment
 For comprehensive evaluation, consider all metrics together:
-- **High S_Acc + High S_Info + High S_Log**: Reliable, concise, and logically consistent explanations
-- **High S_Acc + Low S_Info**: Semantically good but verbose or redundant
-- **High S_Acc + Low S_Log**: Semantically similar but potentially contradictory
-- **High S_Cons**: Consistent performance across structural variations
-- **High S_Rob**: Robust against various perturbations
+ - **High `S_Acc` + High `S_Info` + High `S_Log`**: Reliable, concise, and logically consistent explanations
+ - **High `S_Acc` + Low `S_Info`**: Semantically good but verbose or redundant
+ - **High `S_Acc` + Low `S_Log`**: Semantically similar but potentially contradictory
+ - **High `S_Cons`**: Consistent performance across structural variations
+ - **High `S_Rob`**: Robust against various perturbations
 
 ## 🔧 Technical Details
 
