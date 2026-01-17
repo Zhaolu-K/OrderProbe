@@ -153,8 +153,8 @@ Counters "knowledge dumping" with brevity penalty and ROUGE precision.
 Assesses model resilience under various perturbations:
 
 #### Sequential Robustness (`S_seq`)
-$$\text{MDR} = \text{mean}\left(\frac{\text{Original_Score} - S_{\text{Acc}}}{\text{Original_Score}}\right)$$
-$$\text{MDA} = \max(\text{Original_Score} - S_{\text{Acc}})$$
+$$\text{MDR} = \text{mean}\left(\frac{\text{Original\_Score} - S_{\text{Acc}}}{\text{Original\_Score}}\right)$$
+$$\text{MDA} = \max(\text{Original\_Score} - S_{\text{Acc}})$$
 $$S_{\text{seq}} = 1 - (0.5 \times \text{MDR} + 0.5 \times \text{MDA})$$
 
 #### Structural Robustness (`S_struct`)
