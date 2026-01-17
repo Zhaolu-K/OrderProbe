@@ -1,6 +1,6 @@
 # Information Density ($S_{\mathrm{Info}}$) Calculator
 
-This module implements the Information Density (`S_Info`) evaluation metric that rewards concise, high-information explanations by penalizing verbose outputs that lack proportional semantic gain.
+This module implements the Information Density ($S_{\mathrm{Info}}$) evaluation metric that rewards concise, high-information explanations by penalizing verbose outputs that lack proportional semantic gain.
 
 ## Overview
 
@@ -23,7 +23,7 @@ Sinfo/
 
 ## Components
 
-### 1. ROUGE Precision (P_ROUGE)
+### 1. ROUGE Precision ($P_{\mathrm{ROUGE}}$)
 
 **Purpose**: Measures semantic overlap between prediction and reference
 
@@ -37,19 +37,12 @@ Sinfo/
 **Purpose**: Penalizes explanations that exceed reference length without proportional semantic gain
 
 **Formula**:
+
 $$
 \mathrm{BP} =
 \begin{cases}
-1, & \text{if } c > r,\\[4pt]
+1, & \text{if } c > r, \\
 \exp(1 - r/c), & \text{if } c \le r.
-\end{cases}
-$$
-Display form:
-$$
-\mathrm{BP} = 
-\begin{cases}
-1 & \text{if } c > r,\\[4pt]
-\exp(1 - r/c) & \text{if } c \le r.
 \end{cases}
 $$
 
@@ -170,10 +163,10 @@ s_info = bp * p_rouge  # Element-wise multiplication
 - **1.0**: Perfect semantic overlap with optimal length
 
 ### Component Analysis
-- **High P_ROUGE + High BP**: Well-balanced explanation
-- **High P_ROUGE + Low BP**: Verbose but semantically rich
-- **Low P_ROUGE + High BP**: Concise but semantically poor
-- **Low P_ROUGE + Low BP**: Poor overall quality
+- **High $P_{\mathrm{ROUGE}}$ + High BP**: Well-balanced explanation
+- **High $P_{\mathrm{ROUGE}}$ + Low BP**: Verbose but semantically rich
+- **Low $P_{\mathrm{ROUGE}}$ + High BP**: Concise but semantically poor
+- **Low $P_{\mathrm{ROUGE}}$ + Low BP**: Poor overall quality
 
 ### Use Cases
 - **Encourages Conciseness**: Penalizes unnecessary verbosity
@@ -231,3 +224,4 @@ This implementation follows the ACL 2026 paper methodology for Information Densi
 ---
 
 For integration with other metrics ($S_{\mathrm{Acc}}$, $S_{\mathrm{Log}}$, $S_{\mathrm{Cons}}$), combine $S_{\mathrm{Info}}$ with complementary evaluation approaches for comprehensive idiom explanation assessment.
+
