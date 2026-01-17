@@ -34,7 +34,7 @@ orderprobe/
 │   └── README.md                 # Dataset documentation
 ├── examples/          # Usage examples and demos
 │   └── basic_usage.py            # Basic usage demonstration
-├── Sacc/              # Semantic Accuracy (`S_Acc^mean`)
+├── Sacc/              # Semantic Accuracy ($S_{\mathrm{Acc}}^{\mathrm{mean}}$)
 │   ├── sacc_chinese.py           # Chinese idiom evaluation
 │   ├── sacc_traditional_chinese.py  # Traditional Chinese evaluation
 │   ├── sacc_japanese.py          # Japanese idiom evaluation
@@ -48,8 +48,8 @@ orderprobe/
 ├── Slogic/            # Logical Validity (`S_Log`)
 │   ├── s_log_calculator.py       # Logical Validity (`S_Log`)
 │   └── README.md
-├── Sinfo/             # Information Density (`S_Info`)
-│   ├── s_info_calculator.py      # Information Density (`S_Info`)
+├── Sinfo/             # Information Density ($S_{\mathrm{Info}}$)
+│   ├── s_info_calculator.py      # Information Density ($S_{\mathrm{Info}}$)
 │   └── README.md
 ├── Srobust/           # Robustness Metrics (`S_Rob`)
 │   ├── mdr_calculator.py         # Mean Degradation Relative (`MDR`)
@@ -93,12 +93,13 @@ Measures the ability to reconstruct the canonical four-character sequence from s
 
 ### Diagnostic Metrics
 
-#### 1. Semantic Fidelity (`S_Acc^mean`)
+#### 1. Semantic Fidelity ($S_{\mathrm{Acc}}^{\mathrm{mean}}$)
 
 Evaluates explanation quality using a tiered hybrid metric integrating cross-encoder relevance, multilingual embedding similarity, and lexical safeguards:
 
 **Formula**:
 $$S_{\text{Acc}}^{\text{mean}} = w_1 \times S'_{\text{ce}} + w_2 \times \frac{S'_{\text{bert}} + S'_{\text{sts}} + S'_{\text{cos}}}{3} + w_3 \times S_{f\beta}$$
+Plain text: S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
 
 **Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
 
@@ -108,6 +109,7 @@ Detects fluent but contradictory definitions using entailment probability:
 
 **Formula**:
 $$S_{\text{Log}} = P_{\text{NLI}}(e \Rightarrow r)$$
+Plain text: S_Log = P_NLI(e ⇒ r)
 
 Uses multilingual NLI classifier to ensure explanations logically entail reference meanings.
 
@@ -119,6 +121,7 @@ Quantifies invariance to internal structural shuffles:
 $$E_{\text{perf}} = \frac{1}{|P|} \times \sum_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
 $$R_{\text{sens}} = \max_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
 $$S_{\text{Cons}} = (1 - E_{\text{perf}}) \times (1 - R_{\text{sens}})$$
+Plain text: E_perf = (1/|P|) × Σ_{p∈P} (S_max − S_mean); R_sens = max_{p∈P} (S_max − S_mean); S_Cons = (1 − E_perf) × (1 − R_sens)
 
 Penalizes both average capability loss and localized brittleness across permutations.
 
@@ -128,10 +131,12 @@ Combines sequential and structural robustness dimensions:
 
 **Sequential Robustness**:
 $$S_{\text{seq}} = 1 - (\alpha \times \text{MDR} + \beta \times \text{MDA}), \quad \alpha=\beta=0.5$$
+Plain text: S_seq = 1 − (α × MDR + β × MDA), with α = β = 0.5
 
 **Structural Robustness**:
 $$\mu_k = \frac{1}{|D_k|} \times \sum_{x \in D_k} S_{\text{Acc}}^{\text{mean}}(x)$$
 $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
+Plain text: μ_k = (1/|D_k|) × Σ_{x∈D_k} S_Acc^mean(x); S_struct = 1 − Normalize(σ(μ1, μ2, ..., μ6))
 
 **Composite Robustness**:
 $$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
@@ -141,7 +146,7 @@ Where:
 - **MDA** (Mean Degradation Absolute): $$\mathrm{MDA} = \max(\mathrm{OriginalScore} - S_{\mathrm{Acc}})$$
 - **σ**: Standard deviation of mean scores across 6 linguistic structures
 
-#### 6. Information Density (`S_Info`)
+#### 6. Information Density ($S_{\mathrm{Info}}$)
 
 Rewards concise explanations by penalizing verbosity:
 
@@ -329,7 +334,7 @@ All calculators generate Excel files with results in the `results/` directory:
 ```bash
 # Sacc Configuration
 MODEL_FILE=path/to/input.csv    # Input: model predictions
-OUTPUT_FILE=path/to/output.csv  # Output: `S_Acc` results
+OUTPUT_FILE=path/to/output.csv  # Output: $S_{\mathrm{Acc}}$ results
 REF_AGG_MODE=max                # "max" or "mean" aggregation
 ORIGINAL_FILE=path/to/reference.csv  # Reference data
 
@@ -349,28 +354,28 @@ Pre-configured models for different languages:
 ## 📈 Metric Interpretation
 
 ### Score Ranges
- - **`S_Acc`**: [0, 1], higher is better semantic quality
- - **`S_Info`**: [0, 1], higher indicates better information density (concise and informative)
- - **`S_Log`**: [0, 1], higher indicates better logical entailment
- - **`S_Cons`**: [0, 1], higher indicates better structural stability
- - **`S_seq`**: [0, 1], higher indicates better sequential robustness
- - **`S_struct`**: [0, 1], higher indicates better structural robustness
- - **`S_Rob`**: [0, 1], harmonic mean of sequential and structural robustness
+ - $S_{\mathrm{Acc}}$: [0, 1], higher is better semantic quality
+ - $S_{\mathrm{Info}}$: [0, 1], higher indicates better information density (concise and informative)
+ - $S_{\mathrm{Log}}$: [0, 1], higher indicates better logical entailment
+ - $S_{\mathrm{Cons}}$: [0, 1], higher indicates better structural stability
+ - $S_{\mathrm{seq}}$: [0, 1], higher indicates better sequential robustness
+ - $S_{\mathrm{struct}}$: [0, 1], higher indicates better structural robustness
+ - $S_{\mathrm{Rob}}$: [0, 1], harmonic mean of sequential and structural robustness
 
 ### Performance Guidelines
- - **`S_Acc` > 0.8**: Excellent semantic understanding
- - **`S_Info` > 0.75**: Good information density (concise and informative)
- - **`S_Log` > 0.7**: Good logical consistency
- - **`S_Cons` > 0.9**: High structural stability
- - **`S_Rob` > 0.85**: Good overall robustness
+ - $S_{\mathrm{Acc}} > 0.8$: Excellent semantic understanding
+ - $S_{\mathrm{Info}} > 0.75$: Good information density (concise and informative)
+ - $S_{\mathrm{Log}} > 0.7$: Good logical consistency
+ - $S_{\mathrm{Cons}} > 0.9$: High structural stability
+ - $S_{\mathrm{Rob}} > 0.85$: Good overall robustness
 
 ### Combined Assessment
 For comprehensive evaluation, consider all metrics together:
- - **High `S_Acc` + High `S_Info` + High `S_Log`**: Reliable, concise, and logically consistent explanations
- - **High `S_Acc` + Low `S_Info`**: Semantically good but verbose or redundant
- - **High `S_Acc` + Low `S_Log`**: Semantically similar but potentially contradictory
- - **High `S_Cons`**: Consistent performance across structural variations
- - **High `S_Rob`**: Robust against various perturbations
+ - **High** $S_{\mathrm{Acc}}$ **+ High** $S_{\mathrm{Info}}$ **+ High** $S_{\mathrm{Log}}$: Reliable, concise, and logically consistent explanations
+ - **High** $S_{\mathrm{Acc}}$ **+ Low** $S_{\mathrm{Info}}$: Semantically good but verbose or redundant
+ - **High** $S_{\mathrm{Acc}}$ **+ Low** $S_{\mathrm{Log}}$: Semantically similar but potentially contradictory
+ - **High** $S_{\mathrm{Cons}}$: Consistent performance across structural variations
+ - **High** $S_{\mathrm{Rob}}$: Robust against various perturbations
 
 ## 🔧 Technical Details
 
@@ -455,11 +460,11 @@ orderprobe/
 │   └── README.md           # Dataset documentation
 ├── examples/               # Usage examples
 │   └── basic_usage.py
-├── Sacc/                   # Semantic Accuracy (`S_Acc^mean`)
-├── Slogic/                 # Logical Validity (`S_Log`)
-├── Sinfo/                  # Information Density (`S_Info`)
-├── Scons/                  # Structural Consistency (`S_Cons`)
-└── Srobust/                # Robustness Metrics (`S_Rob`)
+├── Sacc/                   # Semantic Accuracy ($S_{\mathrm{Acc}}^{\mathrm{mean}}$)
+├── Slogic/                 # Logical Validity ($S_{\mathrm{Log}}$)
+├── Sinfo/                  # Information Density ($S_{\mathrm{Info}}$)
+├── Scons/                  # Structural Consistency ($S_{\mathrm{Cons}}$)
+└── Srobust/                # Robustness Metrics ($S_{\mathrm{Rob}}$)
 ```
 
 ## ✅ Open Source Readiness
