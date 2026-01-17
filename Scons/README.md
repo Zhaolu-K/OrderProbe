@@ -4,7 +4,7 @@ This module contains scripts for calculating Structural Consistency (S_Cons) met
 
 ## Components
 
-### Performance Deviation (E_perf)
+### Performance Deviation 
 - **File**: `e_perf_calculator.py`
 - **Purpose**: Measures average gap between recognition capability and realized performance
 - **Formula**:
@@ -14,26 +14,30 @@ $$E_{\text{perf}} = \frac{1}{|P|} \sum_{p \in P} (S_{\text{max}} - S_{\text{mean
   - `S_max` is the maximum semantic accuracy score for permutation `p`
   - `S_mean` is the average semantic accuracy score for permutation `p`
 Display form:
+
 $$
 E_{\mathrm{perf}} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} \left(S_{\max} - S_{\mathrm{mean}}\right)
 $$
 
-### Rigidity Sensitivity (R_sens)
+### Rigidity Sensitivity 
 - **File**: `r_sens_calculator.py`
 - **Purpose**: Measures the maximum gap between capability and performance across permutations
 - **Formula**:
 $$R_{\text{sens}} = \max_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
 Display form:
+
 $$
 R_{\mathrm{sens}} = \max_{p \in \mathcal{P}} \left(S_{\max} - S_{\mathrm{mean}}\right)
 $$
--- ### Structural Consistency ($S_{\mathrm{Cons}}$)
+
+### Structural Consistency ($S_{\mathrm{Cons}}$)
 - **File**: `s_cons_calculator.py`
 - **Purpose**: Combines E_perf and R_sens into overall consistency score
 - **Formula**:
 $$S_{\text{Cons}} = (1 - E_{\text{perf}}) \cdot (1 - R_{\text{sens}})$$
 - **Interpretation**: Higher values indicate better structural stability
 Display form:
+
 $$
 S_{\mathrm{Cons}} = (1 - E_{\mathrm{perf}})\cdot(1 - R_{\mathrm{sens}})
 $$
@@ -74,7 +78,9 @@ $$
 
 ### Input Excel Files
 - **Sheets**: Each arrangement should have its own sheet (e.g., "arrangement1", "arrangement2", etc.)
-- **Columns**: Must contain S_Acc columns ending with "_S_Acc"
+- **Columns**: Must contain $$S_{\mathrm{Acc}}$$
+ columns ending with $$S_{\mathrm{Acc}}$$
+
 - **Data**: Numeric values representing semantic accuracy scores
 
 ### Example Structure
@@ -100,7 +106,8 @@ Model.csv
 ## Important Notes
 
 - **Data Integrity**: Scores are read from separate mean and max result files
-- **Gap Calculation**: For each arrangement, `S_max - S_mean` represents internal volatility
+- **Gap Calculation**: For each arrangement, `$S_{\mathrm{max}} - S_{\mathrm{mean}}$` represents internal volatility
 -- **Multiplicative Penalty**: $S_{\mathrm{Cons}}$ uses multiplicative aggregation to penalize deficiencies in either dimension
 - **Robustness**: Missing data in individual arrangements is handled gracefully
 - **Reproducibility**: Results are deterministic given the same input data
+
