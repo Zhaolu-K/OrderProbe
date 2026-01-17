@@ -137,10 +137,8 @@ $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
 $$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
 Where:
-- **MDR** (Mean Degradation Relative): $$\text{MDR} = \text{mean}\left(\frac{\text{Original\_Score} - S_{\text{Acc}}}{\text{Original\_Score}}\right)$$
-- **MDA** (Mean Degradation Absolute): $$\text{MDA} = \max(\text{Original\_Score} - S_{\text{Acc}})$$
- - **MDR** (Mean Degradation Relative): $$\mathrm{MDR} = \mathrm{mean}\!\left(\frac{\mathrm{OriginalScore} - S_{\mathrm{Acc}}}{\mathrm{OriginalScore}}\right)$$
- - **MDA** (Mean Degradation Absolute): $$\mathrm{MDA} = \max(\mathrm{OriginalScore} - S_{\mathrm{Acc}})$$
+- **MDR** (Mean Degradation Relative): $$\mathrm{MDR} = \mathrm{mean}\!\left(\frac{\mathrm{OriginalScore} - S_{\mathrm{Acc}}}{\mathrm{OriginalScore}}\right)$$
+- **MDA** (Mean Degradation Absolute): $$\mathrm{MDA} = \max(\mathrm{OriginalScore} - S_{\mathrm{Acc}})$$
 - **σ**: Standard deviation of mean scores across 6 linguistic structures
 
 #### 6. Information Density (`S_Info`)
