@@ -44,29 +44,29 @@ orderprobe/
 │   └── README.md                 # Dataset documentation
 ├── examples/          # Usage examples and demos
 │   └── basic_usage.py            # Basic usage demonstration
-├── Sacc/              # Semantic Accuracy ($S_{\mathrm{Acc}}^{\mathrm{mean}}$)
+├── Sacc/              # Semantic Accuracy 
 │   ├── sacc_chinese.py           # Chinese idiom evaluation
 │   ├── sacc_traditional_chinese.py  # Traditional Chinese evaluation
 │   ├── sacc_japanese.py          # Japanese idiom evaluation
 │   ├── sacc_korean.py            # Korean idiom evaluation
 │   └── README.md
-├── Scons/             # Structural Consistency ($S_{\mathrm{Cons}}$)
-│   ├── e_perf_calculator.py      # Performance Deviation (`E_perf`)
-│   ├── r_sens_calculator.py      # Rigidity Sensitivity (`R_sens`)
-│   ├── s_cons_calculator.py      # Structural Consistency ($S_{\mathrm{Cons}}$)
+├── Scons/             # Structural Consistency 
+│   ├── e_perf_calculator.py      # Performance Deviation 
+│   ├── r_sens_calculator.py      # Rigidity Sensitivity 
+│   ├── s_cons_calculator.py      # Structural Consistency 
 │   └── README.md
-├── Slogic/            # Logical Validity (`S_Log`)
-│   ├── s_log_calculator.py       # Logical Validity (`S_Log`)
+├── Slogic/            # Logical Validity 
+│   ├── s_log_calculator.py       # Logical Validity 
 │   └── README.md
-├── Sinfo/             # Information Density ($S_{\mathrm{Info}}$)
-│   ├── s_info_calculator.py      # Information Density ($S_{\mathrm{Info}}$)
+├── Sinfo/             # Information Density 
+│   ├── s_info_calculator.py      # Information Density 
 │   └── README.md
-├── Srobust/           # Robustness Metrics ($$S_{\mathrm{Rob}}$$`)
-│   ├── mdr_calculator.py         # Mean Degradation Relative (`MDR`)
-│   ├── mda_calculator.py         # Mean Degradation Absolute (`MDA`)
-│   ├── sseq_calculator.py        # Sequential Robustness (`S_seq`)
-│   ├── srob_calculator.py        # Composite Robustness ($$S_{\mathrm{Rob}}$$`)
-│   ├── simple_sstruct.py         # Structural Robustness (`S_struct`)
+├── Srobust/           # Robustness Metrics 
+│   ├── mdr_calculator.py         # Mean Degradation Relative 
+│   ├── mda_calculator.py         # Mean Degradation Absolute 
+│   ├── sseq_calculator.py        # Sequential Robustness 
+│   ├── srob_calculator.py        # Composite Robustness 
+│   ├── simple_sstruct.py         # Structural Robustness 
 │   └── README.md
 └── README.md          # This file
 ```
@@ -108,6 +108,7 @@ Measures the ability to reconstruct the canonical four-character sequence from s
 Evaluates explanation quality using a tiered hybrid metric integrating cross-encoder relevance, multilingual embedding similarity, and lexical safeguards:
 
 **Formula**:
+
 $$S_{\mathrm{Acc}} = w_1 \cdot S'_{\mathrm{ce}} + w_2 \cdot \left(\frac{S'_{\mathrm{bert}} + S'_{\mathrm{sts}} + S'_{\mathrm{cos}}}{3}\right) + w_3 \cdot S_{f\beta}$$
 
 
@@ -116,7 +117,7 @@ Plain text:
 S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
 ```
 
-**Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
+**Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 ($\mathrm{F}_\beta$ safeguard)
 
 #### 3. Logical Validity ($S_{\mathrm{Logic}}$)
 
@@ -494,11 +495,11 @@ orderprobe/
 │   └── README.md           # Dataset documentation
 ├── examples/               # Usage examples
 │   └── basic_usage.py
-├── Sacc/                   # Semantic Accuracy ($S_{\mathrm{Acc}}^{\mathrm{mean}}$)
-├── Slogic/                 # Logical Validity ($S_{\mathrm{Log}}$)
-├── Sinfo/                  # Information Density ($S_{\mathrm{Info}}$)
-├── Scons/                  # Structural Consistency ($S_{\mathrm{Cons}}$)
-└── Srobust/                # Robustness Metrics ($S_{\mathrm{Rob}}$)
+├── Sacc/                   # Semantic Accuracy 
+├── Slogic/                 # Logical Validity 
+├── Sinfo/                  # Information Density 
+├── Scons/                  # Structural Consistency 
+└── Srobust/                # Robustness Metrics 
 ```
 
 ## ✅ Open Source Readiness
@@ -531,3 +532,4 @@ Our data construction pipeline utilizes LLMs for semantic augmentation in full c
 ---
 
 **Note**: This code provides the complete OrderProbe benchmark from our ACL 2026 paper. All the evaluation methods follow the exact formulas from the paper, so other researchers can reproduce our results and test their own models.
+
