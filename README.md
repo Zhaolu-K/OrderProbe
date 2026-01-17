@@ -109,7 +109,8 @@ Evaluates explanation quality using a tiered hybrid metric integrating cross-enc
 
 **Formula**:
 $$S_{\text{Acc}} = w_1 \cdot S'_{\text{ce}} + w_2 \cdot \left(\frac{S'_{\text{bert}} + S'_{\text{sts}} + S'_{\text{cos}}}{3}\right) + w_3 \cdot S_{f\beta}$$
-Plain text: S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
+
+S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
 
 **Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
 
@@ -119,7 +120,8 @@ Detects fluent but contradictory definitions using entailment probability:
 
 **Formula**:
 $$S_{\text{Logic}} = P_{\text{NLI}}(e \Rightarrow r)$$
-Plain text: S_Log = P_NLI(e ⇒ r)
+
+S_Log = P_NLI(e ⇒ r)
 
 Uses multilingual NLI classifier to ensure explanations logically entail reference meanings.
 
@@ -128,10 +130,11 @@ Uses multilingual NLI classifier to ensure explanations logically entail referen
 Quantifies invariance to internal structural shuffles:
 
 **Formula**:
-$$E_{\text{perf}} = \frac{1}{|P|} \times \sum_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
+$$E_{\text{perf}} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} (S_{\text{max}} - S_{\text{mean}})$$
 $$R_{\text{sens}} = \max_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
-$$S_{\text{Cons}} = (1 - E_{\text{perf}}) \times (1 - R_{\text{sens}})$$
-Plain text: E_perf = (1/|P|) × Σ_{p∈P} (S_max − S_mean); R_sens = max_{p∈P} (S_max − S_mean); S_Cons = (1 − E_perf) × (1 − R_sens)
+$$S_{\text{Cons}} = (1 - E_{\text{perf}}) \cdot (1 - R_{\text{sens}})$$
+
+E_perf = (1/|P|) × Σ_{p∈P} (S_max − S_mean); R_sens = max_{p∈P} (S_max − S_mean); S_Cons = (1 − E_perf) × (1 − R_sens)
 
 Penalizes both average capability loss and localized brittleness across permutations.
 
@@ -141,12 +144,14 @@ Combines sequential and structural robustness dimensions:
 
 **Sequential Robustness**:
 $$S_{\text{seq}} = 1 - (\alpha \cdot \text{MDR} + \beta \cdot \text{MDA}), \quad \alpha=\beta=0.5$$
-Plain text: S_seq = 1 − (α × MDR + β × MDA), with α = β = 0.5
+
+S_seq = 1 − (α × MDR + β × MDA), with α = β = 0.5
 
 **Structural Robustness**:
-$$\mu_k = \frac{1}{|D_k|} \times \sum_{x \in D_k} S_{\text{Acc}}^{\text{mean}}(x)$$
+$$\mu_k = \frac{1}{|D_k|} \sum_{x \in D_k} S_{\text{Acc}}^{\text{mean}}(x)$$
 $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
-Plain text: μ_k = (1/|D_k|) × Σ_{x∈D_k} S_Acc^mean(x); S_struct = 1 − Normalize(σ(μ1, μ2, ..., μ6))
+
+μ_k = (1/|D_k|) × Σ_{x∈D_k} S_Acc^mean(x); S_struct = 1 − Normalize(σ(μ1, μ2, ..., μ6))
 
 **Composite Robustness**:
 $$S_{\text{Rob}} = \frac{2 \cdot S_{\text{seq}} \cdot S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
