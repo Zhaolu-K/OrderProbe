@@ -4,19 +4,12 @@ This module implements the Semantic Accuracy ($S_{\mathrm{Acc}}$) evaluation fra
 
 ## Overview
 
-S_Acc evaluates idiom explanations using a weighted ensemble of three complementary approaches:
+$S_{\mathrm{Acc}}$ evaluates idiom explanations using a weighted ensemble of three complementary approaches:
 
 **Formula**:
+
 $$
-S_{\mathrm{Acc}} \;=\; w_1 \cdot S'_{\mathrm{ce}}
- \;+\; w_2 \cdot \left(\frac{S'_{\mathrm{bert}} + S'_{\mathrm{sts}} + S'_{\mathrm{cos}}}{3}\right)
- \;+\; w_3 \cdot S_{f\beta}
-$$
-Display form:
-$$
-S_{\mathrm{Acc}}^{\mathrm{mean}} \;=\; w_1 \cdot S'_{\mathrm{ce}}
- \;+\; w_2 \cdot \left(\frac{S'_{\mathrm{bert}} + S'_{\mathrm{sts}} + S'_{\mathrm{cos}}}{3}\right)
- \;+\; w_3 \cdot S_{f\beta}
+S_{\mathrm{Acc}}^{\mathrm{mean}} = w_1 \cdot S'_{\mathrm{ce}} + w_2 \cdot \left(\frac{S'_{\mathrm{bert}} + S'_{\mathrm{sts}} + S'_{\mathrm{cos}}}{3}\right) + w_3 \cdot S_{f\beta}
 $$
 
 Where:
@@ -37,13 +30,13 @@ Sacc/
 
 ## Components
 
-### 1. Cross-Encoder (S'_ce)
+### 1. Cross-Encoder
 
 **Weight**: 0.5 (Primary evaluator)
 
 **Implementation**:
 - Model: `BAAI/bge-reranker-base`
-- Function: `cross_encoder_over_refs()`
+- Function: `cross_encoder_over_refs`
 - Purpose: Full self-attention over concatenated input for detecting subtle semantic entailments
 
 **Process**:
@@ -51,21 +44,21 @@ Sacc/
 2. Compute cross-attention scores
 3. Aggregate across multiple references (max or mean)
 
-### 2. Representation Ensemble (S'_rep)
+### 2. Representation Ensemble
 
 **Weight**: 0.3 (Semantic baseline)
 
 **Components**:
-- **BERTScore (S'_bert)**: BERT-based precision/recall/F1 similarity
-- **STS (S'_sts)**: SentenceTransformer embedding cosine similarity
-- **Lexical Cosine (S'_cos)**: Token-based cosine similarity
+- **BERTScore ($S'_{\mathrm{bert}}$)**: BERT-based precision/recall/F1 similarity
+- **STS ($S'_{\mathrm{sts}}$)**: SentenceTransformer embedding cosine similarity
+- **Lexical Cosine ($S'_{\mathrm{cos}}$)**: Token-based cosine similarity
 
 **Implementation**:
 ```python
 rep_val = (BERTScore + STS_cosine + lexical_cosine) / 3
 ```
 
-### 3. F_β Score (S_fβ)
+### 3. F_β Score
 
 **Weight**: 0.2 (Lexical safeguard)
 
@@ -227,7 +220,7 @@ def content_fbeta_with_polarity(pred, refs, idiom):
     pred_tokens = tokenize_content(pred)
     ref_tokens = [tokenize_content(r) for r in refs]
 
-    # F_β calculation with β=2
+    # $\mathrm{F}_\beta$ calculation with β=2
     # Polarity conflict detection
     # Return F_β score and polarity analysis
 ```
@@ -243,7 +236,7 @@ def content_fbeta_with_polarity(pred, refs, idiom):
 ### Component Contributions
 - **Cross-Encoder (50%)**: Primary semantic entailment detection
 - **Representation (30%)**: Robust semantic baseline across methods
-- **F_β (20%)**: Lexical accuracy safeguard
+- **$\mathrm{F}_\beta$ (20%)**: Lexical accuracy safeguard
 
 ## Dependencies
 
@@ -293,3 +286,4 @@ This implementation is based on the ACL 2026 paper methodology for comprehensive
 ---
 
 For questions about specific language implementations or customization needs, refer to the individual script docstrings or open an issue.
+
