@@ -6,6 +6,8 @@
 
 This repository contains **OrderProbe**, a new benchmark from our ACL 2026 paper for testing how well large language models handle word order. **The main question we're asking is: Can AI models figure out the correct word order when we scramble it?** We solve the problem of multiple correct answers by using short four-character phrases from Chinese, Japanese, and Korean that have only one right way to arrange them.
 
+Large language models (LLMs) excel at semantic understanding, yet their ability to reconstruct internal structure from scrambled inputs remains underexplored. Sentence-level restoration is ill-posed for automated evaluation because multiple valid word orders often exist. We introduce OrderProbe, a deterministic benchmark for structural reconstruction using fixed four-character expressions in Chinese, Japanese, and Korean, which have a unique canonical order and thus support exact-match scoring. Experiments on twelve widely used LLMs show that structural reconstruction remains difficult even for frontier systems: zero-shot recovery frequently falls below 35\%.
+
 ## Key Contributions
 
 - 🎯 **Core Research Question**: Can AI models figure out the correct word order when we scramble it?
@@ -15,12 +17,20 @@ This repository contains **OrderProbe**, a new benchmark from our ACL 2026 paper
 - 🔬 **Structural Dissociation**: Shows the gap between understanding meaning and understanding structure
 - 📈 **Cross-Script Analysis**: Comparison of different writing systems (like Chinese vs. Korean)
 
+**Four Main Contributions**:
+1. We identify the ambiguity of sentence-level restoration and establish fixed four-character expressions as a deterministic proxy for evaluating structural reconstruction.
+2. We introduce OrderProbe, a multilingual benchmark comprising 3,543 curated samples across six syntactic categories.
+3. We propose a diagnostic evaluation framework that moves beyond simple scoring to characterize robustness sensitivity, semantic fidelity, and hallucination behavior.
+4. We evaluate twelve widely used LLMs on OrderProbe and find that exact reconstruction remains challenging, with zero-shot recovery frequently below 35\% even for state-of-the-art systems.
+
 ## 🔬 Core Findings
 
 - ⚠️ **Structure Recognition is Hard**: When we scramble the internal order of words, AI models have trouble figuring out the correct structure - even the best models often get less than 35% right without any hints
 - 🧠 **Meaning vs. Structure**: Models can understand what words mean but struggle to put them in the right order, showing that these are different skills
 - 🌏 **Writing Systems Matter**: Languages like Chinese and Japanese give models better clues for structure than Korean, which affects how hard the task is
 - 💭 **Thinking Step-by-Step Helps**: Asking models to explain their thinking improves results, but the benefits vary a lot between different models
+
+**Key Results**: Experiments on twelve widely used LLMs show that structural reconstruction remains difficult even for frontier systems: zero-shot recovery frequently falls below 35\%. We also observe a consistent dissociation between semantic recall and structural planning, suggesting that structural robustness is not an automatic byproduct of semantic competence.
 
 ## Project Structure
 
@@ -87,7 +97,7 @@ OrderProbe includes **3,543 carefully selected four-character phrases** from:
 
 **Global structural integrity indicator - exact match of canonical order**
 
-$$\text{Recovery} = \frac{1}{N} \times \sum I(\hat{y}_i = y_i)$$
+$$\text{Recovery} = \frac{1}{N} \sum_{i=1}^N \mathbb{I}(\hat{x}_i = x_i)$$
 
 Measures the ability to reconstruct the canonical four-character sequence from scrambled constituents.
 
@@ -98,7 +108,7 @@ Measures the ability to reconstruct the canonical four-character sequence from s
 Evaluates explanation quality using a tiered hybrid metric integrating cross-encoder relevance, multilingual embedding similarity, and lexical safeguards:
 
 **Formula**:
-$$S_{\text{Acc}}^{\text{mean}} = w_1 \times S'_{\text{ce}} + w_2 \times \frac{S'_{\text{bert}} + S'_{\text{sts}} + S'_{\text{cos}}}{3} + w_3 \times S_{f\beta}$$
+$$S_{\text{Acc}} = w_1 \cdot S'_{\text{ce}} + w_2 \cdot \left(\frac{S'_{\text{bert}} + S'_{\text{sts}} + S'_{\text{cos}}}{3}\right) + w_3 \cdot S_{f\beta}$$
 Plain text: S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
 
 **Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
@@ -108,7 +118,7 @@ Plain text: S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w
 Detects fluent but contradictory definitions using entailment probability:
 
 **Formula**:
-$$S_{\text{Log}} = P_{\text{NLI}}(e \Rightarrow r)$$
+$$S_{\text{Logic}} = P_{\text{NLI}}(e \Rightarrow r)$$
 Plain text: S_Log = P_NLI(e ⇒ r)
 
 Uses multilingual NLI classifier to ensure explanations logically entail reference meanings.
@@ -130,7 +140,7 @@ Penalizes both average capability loss and localized brittleness across permutat
 Combines sequential and structural robustness dimensions:
 
 **Sequential Robustness**:
-$$S_{\text{seq}} = 1 - (\alpha \times \text{MDR} + \beta \times \text{MDA}), \quad \alpha=\beta=0.5$$
+$$S_{\text{seq}} = 1 - (\alpha \cdot \text{MDR} + \beta \cdot \text{MDA}), \quad \alpha=\beta=0.5$$
 Plain text: S_seq = 1 − (α × MDR + β × MDA), with α = β = 0.5
 
 **Structural Robustness**:
@@ -139,11 +149,11 @@ $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
 Plain text: μ_k = (1/|D_k|) × Σ_{x∈D_k} S_Acc^mean(x); S_struct = 1 − Normalize(σ(μ1, μ2, ..., μ6))
 
 **Composite Robustness**:
-$$S_{\text{Rob}} = \frac{2 \times S_{\text{seq}} \times S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
+$$S_{\text{Rob}} = \frac{2 \cdot S_{\text{seq}} \cdot S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
 
 Where:
-- **MDR** (Mean Degradation Relative): $$\mathrm{MDR} = \mathrm{mean}\!\left(\frac{\mathrm{OriginalScore} - S_{\mathrm{Acc}}}{\mathrm{OriginalScore}}\right)$$
-- **MDA** (Mean Degradation Absolute): $$\mathrm{MDA} = \max(\mathrm{OriginalScore} - S_{\mathrm{Acc}})$$
+- **MDR**: $$\mathrm{MDR} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} \frac{S_{\text{orig}} - S_{\text{pert}}^{p}}{S_{\text{orig}}}$$
+- **MDA**: $$\mathrm{MDA} = \max_{p \in \mathcal{P}} \left( \frac{S_{\text{orig}} - S_{\text{pert}}^{p}}{S_{\text{orig}}} \right)$$
 - **σ**: Standard deviation of mean scores across 6 linguistic structures
 
 #### 6. Information Density ($S_{\mathrm{Info}}$)
@@ -151,7 +161,7 @@ Where:
 Rewards concise explanations by penalizing verbosity:
 
 **Formula**:
-$$S_{\text{Info}} = \text{BP} \times P_{\text{ROUGE}}$$
+$$S_{\text{Info}} = \text{BP} \cdot P_{\text{ROUGE}}$$
 
 Counters "knowledge dumping" with brevity penalty and ROUGE precision.
 
@@ -479,6 +489,20 @@ This repository is fully prepared for open source release:
 - 🚀 **Examples**: Basic usage demonstrations
 - 🤝 **Contributing**: Clear contribution guidelines
 - 🔒 **Security**: No hardcoded credentials or sensitive data
+
+## ⚠️ Limitations
+
+Our OrderProbe is designed to evaluate model capabilities through structural reasoning tasks. The types within our dataset reflect our effort to collect data from multiple perspectives. However, we acknowledge that the scope of knowledge covered is inherently limited by the expertise of the contributors and cannot encompass all facets of linguistic structural integrity. Moreover, structural robustness currently lacks a universally accepted definition. Our evaluation is based on six syntactic categories that, while comprehensive, do not cover the full spectrum of linguistic patterns.
+
+Since our dataset is constructed by referencing materials in three languages, we provide multilingual evaluation data. However, the influence of different script typologies on model performance has not been thoroughly analyzed for alphabetic languages. We have not conducted detailed experiments on morphologically rich systems where structural perturbations might yield different results.
+
+In addition, some data points involve crystallized expressions that are present in pre training corpora. We recognize that correct reconstruction depends on the memorization of these fixed patterns. Although the results are accurate within this specific domain, future developments may require models to handle novel combinations beyond memorized content. For these items, we ensure their validity within the current linguistic context. Although these limitations are relevant, we believe they extend beyond the scope and original intent of our work. We hope that future studies will address these challenges in more detail.
+
+## 🛡️ Ethics Statement
+
+The OrderProbe dataset integrates linguistic resources from the public domain under fair use principles for academic research. We confirm that the collected expressions are free from copyright restrictions and strictly adhere to data usage policies. All participants provided informed consent and followed a rigorous protocol to exclude offensive or discriminatory content.
+
+Our data construction pipeline utilizes LLMs for semantic augmentation in full compliance with provider terms of service. We declare that all generated outputs underwent human verification to ensure factual accuracy and safety. This work serves as a diagnostic benchmark for enhancing model robustness. We foresee no direct negative societal impacts or misuse risks associated with the release of this dataset.
 
 ---
 
