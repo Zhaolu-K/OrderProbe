@@ -50,10 +50,10 @@ orderprobe/
 │   ├── sacc_japanese.py          # Japanese idiom evaluation
 │   ├── sacc_korean.py            # Korean idiom evaluation
 │   └── README.md
-├── Scons/             # Structural Consistency (`S_Cons`)
+├── Scons/             # Structural Consistency ($S_{\mathrm{Cons}}$)
 │   ├── e_perf_calculator.py      # Performance Deviation (`E_perf`)
 │   ├── r_sens_calculator.py      # Rigidity Sensitivity (`R_sens`)
-│   ├── s_cons_calculator.py      # Structural Consistency (`S_Cons`)
+│   ├── s_cons_calculator.py      # Structural Consistency ($S_{\mathrm{Cons}}$)
 │   └── README.md
 ├── Slogic/            # Logical Validity (`S_Log`)
 │   ├── s_log_calculator.py       # Logical Validity (`S_Log`)
@@ -61,11 +61,11 @@ orderprobe/
 ├── Sinfo/             # Information Density ($S_{\mathrm{Info}}$)
 │   ├── s_info_calculator.py      # Information Density ($S_{\mathrm{Info}}$)
 │   └── README.md
-├── Srobust/           # Robustness Metrics (`S_Rob`)
+├── Srobust/           # Robustness Metrics ($$S_{\mathrm{Rob}}$$`)
 │   ├── mdr_calculator.py         # Mean Degradation Relative (`MDR`)
 │   ├── mda_calculator.py         # Mean Degradation Absolute (`MDA`)
 │   ├── sseq_calculator.py        # Sequential Robustness (`S_seq`)
-│   ├── srob_calculator.py        # Composite Robustness (`S_Rob`)
+│   ├── srob_calculator.py        # Composite Robustness ($$S_{\mathrm{Rob}}$$`)
 │   ├── simple_sstruct.py         # Structural Robustness (`S_struct`)
 │   └── README.md
 └── README.md          # This file
@@ -108,50 +108,69 @@ Measures the ability to reconstruct the canonical four-character sequence from s
 Evaluates explanation quality using a tiered hybrid metric integrating cross-encoder relevance, multilingual embedding similarity, and lexical safeguards:
 
 **Formula**:
-$$S_{\text{Acc}} = w_1 \cdot S'_{\text{ce}} + w_2 \cdot \left(\frac{S'_{\text{bert}} + S'_{\text{sts}} + S'_{\text{cos}}}{3}\right) + w_3 \cdot S_{f\beta}$$
+$$S_{\mathrm{Acc}} = w_1 \cdot S'_{\mathrm{ce}} + w_2 \cdot \left(\frac{S'_{\mathrm{bert}} + S'_{\mathrm{sts}} + S'_{\mathrm{cos}}}{3}\right) + w_3 \cdot S_{f\beta}$$
 
+
+Plain text:
+```
 S_Acc^mean = w1 × S'_ce + w2 × (S'_bert + S'_sts + S'_cos) / 3 + w3 × S_fβ
+```
 
 **Weights**: w₁=0.5 (Cross-Encoder), w₂=0.3 (Representation Ensemble), w₃=0.2 (F_β safeguard)
 
-#### 3. Logical Validity (`S_Log`)
+#### 3. Logical Validity ($S_{\mathrm{Logic}}$)
 
 Detects fluent but contradictory definitions using entailment probability:
 
 **Formula**:
 $$S_{\text{Logic}} = P_{\text{NLI}}(e \Rightarrow r)$$
 
+Plain text:
+```
 S_Log = P_NLI(e ⇒ r)
+```
 
 Uses multilingual NLI classifier to ensure explanations logically entail reference meanings.
 
-#### 4. Structural Consistency (`S_Cons`)
+#### 4. Structural Consistency ($S_{\mathrm{Cons}}$)
 
 Quantifies invariance to internal structural shuffles:
 
 **Formula**:
 $$E_{\text{perf}} = \frac{1}{|\mathcal{P}|} \sum_{p \in \mathcal{P}} (S_{\text{max}} - S_{\text{mean}})$$
+
 $$R_{\text{sens}} = \max_{p \in P} (S_{\text{max}} - S_{\text{mean}})$$
+
 $$S_{\text{Cons}} = (1 - E_{\text{perf}}) \cdot (1 - R_{\text{sens}})$$
 
+Plain text:
+```
 E_perf = (1/|P|) × Σ_{p∈P} (S_max − S_mean); R_sens = max_{p∈P} (S_max − S_mean); S_Cons = (1 − E_perf) × (1 − R_sens)
+```
 
 Penalizes both average capability loss and localized brittleness across permutations.
 
-#### 5. Robustness (`S_Rob`)
+#### 5. Robustness ($$S_{\mathrm{Rob}}$$)
 
 Combines sequential and structural robustness dimensions:
 
 **Sequential Robustness**:
 $$S_{\text{seq}} = 1 - (\alpha \cdot \text{MDR} + \beta \cdot \text{MDA}), \quad \alpha=\beta=0.5$$
 
+Plain text:
+```
 S_seq = 1 − (α × MDR + β × MDA), with α = β = 0.5
+```
 
 **Structural Robustness**:
 $$\mu_k = \frac{1}{|D_k|} \sum_{x \in D_k} S_{\text{Acc}}^{\text{mean}}(x)$$
+
 $$S_{\text{struct}} = 1 - \text{Normalize}(\sigma(\mu_1, \mu_2, \dots, \mu_6))$$
 
+Plain text:
+```
 μ_k = (1/|D_k|) × Σ_{x∈D_k} S_Acc^mean(x); S_struct = 1 − Normalize(σ(μ1, μ2, ..., μ6))
+```
 
 **Composite Robustness**:
 $$S_{\text{Rob}} = \frac{2 \cdot S_{\text{seq}} \cdot S_{\text{struct}}}{S_{\text{seq}} + S_{\text{struct}}}$$
